@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Digital Clock</title>
+  <style>
+    /* Main background with a gradient and stars */
+    body {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+      margin: 0;
+      background: linear-gradient(to bottom right, #0f2027, #203a43, #2c5364);
+      overflow: hidden;
+      color: white;
+      font-family: Arial, sans-serif;
+    }
+
+    /* Star animation styling */
+    .star {
+      position: absolute;
+      width: 2px;
+      height: 2px;
+      background: #ffffff;
+      border-radius: 50%;
+      box-shadow: 0px 0px 5px rgba(255, 255, 255, 0.8);
+      animation: twinkle 3s infinite ease-in-out;
+    }
+
+    @keyframes twinkle {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Title styling */
+    h1 {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: #00d4ff;
+      text-shadow: 0px 0px 8px #00d4ff, 0px 0px 16px #00d4ff;
+    }
+
+    /* Clock container styling */
+    .clock {
+      font-size: 4rem;
+      font-family: 'Courier New', Courier, monospace;
+      background-color: #102a43;
+      color: #00d4ff;
+      padding: 1.5rem 3rem;
+      border-radius: 12px;
+      border: 2px solid #00d4ff;
+      box-shadow: 0px 0px 15px rgba(0, 212, 255, 0.7),
+                  0px 0px 25px rgba(0, 212, 255, 0.5),
+                  inset 0px 0px 5px rgba(0, 212, 255, 0.8);
+      animation: glow 1.5s ease-in-out infinite alternate;
+      text-align: center;
+    }
+
+    /* Glowing animation for the clock */
+    @keyframes glow {
+      from {
+        box-shadow: 0px 0px 15px rgba(0, 212, 255, 0.7),
+                    0px 0px 25px rgba(0, 212, 255, 0.5),
+                    inset 0px 0px 5px rgba(0, 212, 255, 0.8);
+      }
+      to {
+        box-shadow: 0px 0px 25px rgba(0, 212, 255, 1),
+                    0px 0px 35px rgba(0, 212, 255, 0.8),
+                    inset 0px 0px 8px rgba(0, 212, 255, 1);
+      }
+    }
+  </style>
+
+  <!-- React and Babel CDN -->
+  <script src="https://unpkg.com/react@17/umd/react.development.js" crossorigin></script>
+  <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js" crossorigin></script>
+  <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+</head>
+<body>
+  <div id="root"></div>
+
+  <!-- Animated stars in the background -->
+  <script>
+    const starCount = 100;
+    for (let i = 0; i < starCount; i++) {
+      const star = document.createElement('div');
+      star.classList.add('star');
+      star.style.left = `${Math.random() * 100}vw`;
+      star.style.top = `${Math.random() * 100}vh`;
+      star.style.animationDuration = `${2 + Math.random() * 2}s`;
+      document.body.appendChild(star);
+    }
+  </script>
+
+  <!-- React component script -->
+  <script type="text/babel">
+    const { useState, useEffect } = React;
+
+    const DigitalClock = () => {
+      const [time, setTime] = useState(new Date());
+
+      useEffect(() => {
+        const interval = setInterval(() => {
+          setTime(new Date());
+        }, 1000);
+
+        // Clean up the interval on component unmount
+        return () => clearInterval(interval);
+      }, []);
+
+      const formattedTime = time.toLocaleTimeString();
+
+      return (
+        <div className="clock">
+          {formattedTime}
+        </div>
+      );
+    };
+
+    const App = () => (
+      <div className="App">
+        <h1></h1>
+        <DigitalClock />
+      </div>
+    );
+
+    // Render the App component to the root div
+    ReactDOM.render(<App />, document.getElementById('root'));
+  </script>
+</body>
+</html>
